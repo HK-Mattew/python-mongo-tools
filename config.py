@@ -1,0 +1,3 @@
+
+
+MONGODUMP_DEFAULT_OUTPUT_DIR = './backup/mongo'
