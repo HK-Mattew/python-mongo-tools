@@ -55,24 +55,24 @@ class MongoDump():
 
         self.__create_output_directory()
 
-        cmd = self.__create_command_string()
+        cmd = self.__create_command_string().strip()
         mongodump_logger.info('Cmd dump: ' + cmd)
 
         try:
-            output_dumping = subprocess.call(
-                cmd.split(' '),
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.STDOUT
-            )
-            assert output_dumping == 0#Success
+            with subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE) as proc:
+                out = proc.stdout.read()
+                mongodump_logger.info(out)
+                print(out)
+
             mongodump_logger.info('Backup performed successfully.')
-            mongodump_logger.info(f'Backup output: {output_dumping}')
         except subprocess.CalledProcessError as cpe:
             llt = f'Backup error: {cpe}'
             mongodump_logger.error(llt)
             with open(self.out_with_date+'/dumperr.txt', 'a') as ffile:
                 ffile.close()
-            raise Exception(llt)
+            
+            print('An error has occurred. Details in the log file at /logs')
+            exit()
         
         with open(self.out_with_date+'/dumpsuccess.txt', 'a') as ffile:
             ffile.close()
