@@ -21,7 +21,8 @@ class MongoDump():
         password: NONE_OR_STRING=None,
         db: NONE_OR_STRING=None,
         out: str=MONGODUMP_DEFAULT_OUTPUT_DIR,
-        authenticationDatabase: NONE_OR_STRING=None
+        authenticationDatabase: NONE_OR_STRING=None,
+        numParallelCollections: NONE_OR_INT=None
         ) -> None:
         self.db = db
         self.host = host
@@ -33,6 +34,7 @@ class MongoDump():
         else:
             self.out = out
         self.authenticationDatabase = authenticationDatabase
+        self.numParallelCollections = numParallelCollections
 
         if not out:
             llt = 'It is necessary to inform the output in ' \
@@ -149,7 +151,8 @@ class MongoDump():
         accepted_parameters = [
             'db', 'host', 'port',
             'username', 'password',
-            'out', 'authenticationDatabase'
+            'out', 'authenticationDatabase',
+            'numParallelCollections'
         ]
         
         for parameter in accepted_parameters:
